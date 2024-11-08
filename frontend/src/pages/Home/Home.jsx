@@ -4,6 +4,7 @@ import Board from "./Board/Board";
 import Tags from "./Tags/Tags";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import { configToken } from "../../services/utils";
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState("board");
@@ -29,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await api.get("/tasks");
+        const response = await api.get("/tasks", configToken());
         setTasks(response.data);
       } catch (error) {
         console.error(error);
