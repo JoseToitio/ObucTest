@@ -3,6 +3,7 @@ import "./Tags.css";
 import { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import InputText from "../../../components/InputText/InputText";
 export default function Tags({ tags, setTags }) {
   const [newTag, setNewTag] = useState("");
 
@@ -41,7 +42,7 @@ export default function Tags({ tags, setTags }) {
       <h1>Tags</h1>
       <div className="form-wrapper">
         <form onSubmit={(event) => handleTagSubmit(event)}>
-          <input
+          <InputText
             type="text"
             placeholder="Enter tag name"
             required
