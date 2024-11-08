@@ -8,8 +8,10 @@ import OptionSelect from "../../../components/OptionSelect/OptionSelect";
 import Table from "../../../components/Table/Table";
 import PropTypes from "prop-types";
 import { api } from "../../../services/api";
+import getUser from "../../../services/utils";
 
 export default function Board({ tasks, setTasks, status }) {
+  const user = getUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const clearNewTask = {
     description: "",
@@ -42,13 +44,18 @@ export default function Board({ tasks, setTasks, status }) {
   );
 
   const handleSubmit = async () => {
+    const config = {
+      headers: {
+        'Authorization': `${user.token}`,
+      },
+    };
     try {
       await api.post("/tasks", {
         assignedTo: newTask.assignedTo,
         description: newTask.description,
         status: newTask.status,
-      });
-      const response = await api.get("/tasks");
+      }, config);
+      const response = await api.get("/tasks", config);
       setTasks(response.data);
     } catch (error) {
       console.error(error);

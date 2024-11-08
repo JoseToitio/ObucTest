@@ -4,12 +4,13 @@ import obucLogo from "../../assets/obuc-logo.png";
 import { GoGear } from "react-icons/go";
 import { PiLayout } from "react-icons/pi";
 import { CiUser } from "react-icons/ci";
+import getUser from "../../services/utils";
 
 export default function Navbar({ currentTab, setCurrentTab }) {
+  const user = getUser();
   const navButtons = [
     { id: 1, label: "Board", icon: <PiLayout />, value: "board" },
     { id: 2, label: "Tags", icon: <GoGear />, value: "tags" },
-    {id: 3, label: "Login/Register" , icon: <CiUser /> , value: "user"}
   ];
   return (
     <div className="navbar-wrapper">
@@ -30,7 +31,7 @@ export default function Navbar({ currentTab, setCurrentTab }) {
           </button>
         ))}
       <div className="user-container">
-        
+        <CiUser  size={20}/> {user ? user.user : 'Login'}
       </div>
       </div>
     </div>
