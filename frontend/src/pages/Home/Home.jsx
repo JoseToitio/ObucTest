@@ -51,7 +51,7 @@ export default function Home() {
 
   const [tags, setTags] = useState(mockTags);
 
-  const statusOptions = [{ id: 1, value: "pending", label: "Pending" }];
+  const statusOptions = [{ id: 1, value: "pending", label: "Pending" }, { id: 2, value: "inProgress", label: "In Progress" }, { id: 3, value: "completed", label: "Done" }];
 
   const tabs = {
     board: (
