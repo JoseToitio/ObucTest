@@ -1,97 +1,89 @@
 import { FaPlus } from "react-icons/fa";
 import "./Tags.css";
-import { useCallback, useState } from "react";
-import PropTypes from "prop-types";
-import { MdOutlineDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import InputText from "../../../components/InputText/InputText";
-export default function Tags({ tags, setTags }) {
+import Button from "../../../components/Button/Button";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
+
+export default function Tags() {
   const [newTag, setNewTag] = useState("");
+  const [tags, setTags] = useState([
+    { id: 1, name: "Frontend" },
+    { id: 2, name: "Backend" },
+    { id: 3, name: "Design" },
+  ]);
 
-  const handleDeleteRow = useCallback(
-    async (id) => {
-      if (!tags.rows.length) {
-        return;
-      }
-      setTags((prev) => ({
-        ...prev,
-        rows: prev.rows.filter((tag) => tag.id !== id),
-      }));
-    },
-    [tags.rows.length, setTags]
-  );
+  const handleDelete = (id) => {
+    setTags(tags.filter((tag) => tag.id !== id));
+  };
 
+  const handleEdit = (id) => {
+    console.log("Editar tag com id:", id);
+  };
   const handleTagSubmit = (event) => {
     event.preventDefault();
     if (!newTag) {
       return;
     }
-    setTags((prev) => ({
+
+    setTags((prev) => [
       ...prev,
-      rows: [...prev.rows, { id: prev.rows.length + 1, tag: newTag }],
-    }));
+      {
+        id: prev.length + 1,
+        name: newTag,
+      },
+    ]);
+
+    setNewTag("");
   };
 
   const handleChange = (event) => {
     setNewTag(event.target.value);
   };
 
-  const { headers, rows } = tags;
-
   return (
     <div className="tags-wrapper">
       <h1>Tags</h1>
       <div className="form-wrapper">
-        <form onSubmit={(event) => handleTagSubmit(event)}>
+        <div className="tag-input-container">
           <InputText
             type="text"
             placeholder="Enter tag name"
-            required
+            value={newTag}
             onChange={handleChange}
           />
-          <button type="submit">
-            <FaPlus /> Add Tag
-          </button>
-        </form>
+          <Button onClick={handleTagSubmit}>
+            <FaPlus />
+            Add Tag
+          </Button>
+        </div>
       </div>
-      <table>
-      <thead>
-        <tr>
-          {headers.map((header, index) => (
-            <th key={index}>
-              {header.label}
-            </th>
-          ))}
-          {rows.length !== 0 && <th ></th>}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.length === 0 ? (
-          <tr>
-            <td colSpan={headers.length}></td>
-          </tr>
-        ) : (
-          rows.map((row) => (
-            <tr key={row.id}>
-              {headers.map((header, colIndex) => (
-                <td key={colIndex} style={{border: "1px solid black"}}>
-                  {row[header.column]}
-                </td>
-              ))}
-              <td style={{width: "1rem", border: "1px solid black"}}>
-                <button onClick={() => handleDeleteRow(row.id)}>
-                  <MdOutlineDeleteOutline />
+      <div className="tag-list">
+        <div className="tag-header">
+          <span>Tag Name</span>
+        </div>
+        <ul className="tag-items">
+          {tags.map((tag, index) => (
+            <li key={index} className="tag-item">
+              <span className="tag-name">{tag.name}</span>
+              <div className="tag-actions">
+                <button
+                  className="action-button"
+                  onClick={() => handleDelete(tag.id)}
+                >
+                  <FiTrash2 />
                 </button>
-              </td>
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
+                <button
+                  className="action-button"
+                  onClick={() => handleEdit(tag.id)}
+                >
+                  <FiEdit2 />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
-
-Tags.propTypes = {
-  tags: PropTypes.object.isRequired,
-  setTags: PropTypes.func.isRequired,
-};

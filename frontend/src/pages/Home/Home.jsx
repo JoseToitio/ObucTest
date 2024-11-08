@@ -18,15 +18,6 @@ export default function Home() {
     rows: [],
   });
 
-  const mockTags = {
-    headers: [{ label: "Tag", column: "tag" }],
-    rows: [
-      { id: 1, tag: "Design" },
-      { id: 2, tag: "Frontend" },
-      { id: 3, tag: "Backend" },
-    ],
-  };
-
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -50,8 +41,6 @@ export default function Home() {
     });
   }, [tasks, setTasks]);
 
-  const [tags, setTags] = useState(mockTags);
-
   const statusOptions = [{ id: 1, value: "pending", label: "Pending" }, { id: 2, value: "inProgress", label: "In Progress" }, { id: 3, value: "completed", label: "Done" }];
 
   const tabs = {
@@ -62,7 +51,7 @@ export default function Home() {
         setTasks={setTasks}
       />
     ),
-    tags: <Tags tags={tags} setTags={setTags} />,
+    tags: <Tags  />,
   };
   
   return (
