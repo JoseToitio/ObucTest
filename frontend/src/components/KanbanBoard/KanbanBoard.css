@@ -1,22 +1,29 @@
-.container-board {
+.drag-drop {
   display: flex;
-  justify-content: center;
-  height: 100%;
-  gap: 5rem;
+  width: 100%;
+  gap: 16px;
+  height: 85%;
+  overflow: hidden;
 }
 
-
-.title {
-  margin-bottom: 0;
+.column {
+  display: flex;
+  list-style: none;
+  width: 362px;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 24px;
+  background-color: #EEF2F5;
+  border-radius: 8px;
+  overflow: hidden auto;
 }
 
-.description {
-
-}
-
-.tasks {
-  list-style-type: none;
+.label {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
 }

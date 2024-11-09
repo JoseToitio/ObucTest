@@ -1,8 +1,23 @@
 import PropTypes from "prop-types";
 import "./KanbanBoard.css";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useState, useEffect } from "react";
 import { updateTaskStatus } from "../../services/api";
+import Card from "../Card/Card";
+
+function borderColor(label) {
+  switch (label) {
+    case "To do":
+      return "#00569E";
+    case "In progress":
+      return "#FFA500";
+    case "Done":
+      return "#40A737";
+    default:
+      break;
+  }
+}
+
 
 export default function KanbanBoard({ data }) {
   const [columns, setColumns] = useState(data);
@@ -36,7 +51,7 @@ export default function KanbanBoard({ data }) {
       });
     }
   };
-
+  console.log(columns);
   useEffect(() => {
     const groupedTasks = data.headers.reduce((acc, { column }) => {
       acc[column] = data.rows.filter((task) => task.status === column);
@@ -46,57 +61,30 @@ export default function KanbanBoard({ data }) {
   }, [data]);
 
   return (
-    <div className="container-board">
-      <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="drag-drop">
         {data.headers.map(({ label, column }) => (
           <Droppable droppableId={column} key={column}>
-            {(provided, snapshot) => (
+            {(provided) => (
               <ul
-                className="tasks"
+                className="column"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                style={{
-                  background: snapshot.isDraggingOver
-                    ? "lightblue"
-                    : "lightgrey",
-                  padding: 4,
-                  width: 250,
-                }}
               >
-                <label>{label}</label>
+                <div className="label">
+                  <label>{label}</label>
+                  <hr style={{ borderTop: `3px solid ${borderColor(label)}` }} />
+                </div>
                 {columns[column]?.map((task, index) => (
-                  <Draggable
-                    key={task.id}
-                    draggableId={task.id.toString()}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <li
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <div className="title">
-                          <p>{task.title}</p>
-                          <hr />
-                        </div>
-                        <div className="description">
-                          <p>{task.description}</p>
-                        </div>
-                        <div className={`status ${task.status}`}>
-                          {task.status}
-                        </div>
-                      </li>
-                    )}
-                  </Draggable>
+                  <Card key={index} index={index} task={task}/>
                 ))}
                 {provided.placeholder}
               </ul>
             )}
           </Droppable>
         ))}
-      </DragDropContext>
-    </div>
+      </div>
+    </DragDropContext>
   );
 }
 

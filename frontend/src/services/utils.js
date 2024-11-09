@@ -16,22 +16,3 @@ export function configToken() {
     },
   };
 }
-
-export const initialData = {
-  columns: {
-    pending: {
-      name: "To do",
-      items: [
-      ],
-    },
-    inProgress: {
-      name: "In Progress",
-      items: [
-      ],
-    },
-    completed: {
-      name: "Completed",
-      items: [],
-    },
-  },
-};

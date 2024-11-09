@@ -2,10 +2,9 @@ import { FaPlus } from "react-icons/fa";
 import Button from "../../../components/Button/Button";
 import "./Board.css";
 import Modal from "../../../components/Modal/Modal";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import InputText from "../../../components/InputText/InputText";
 import OptionSelect from "../../../components/OptionSelect/OptionSelect";
-import Table from "../../../components/Table/Table";
 import PropTypes from "prop-types";
 import { api } from "../../../services/api";
 import { configToken } from "../../../services/utils";
@@ -28,20 +27,20 @@ export default function Board({ tasks, setTasks, status }) {
     setIsModalOpen((prev) => !prev);
   };
 
-  const handleDeleteRow = useCallback(
-    async (id) => {
-      if (!tasks.rows.length) {
-        return;
-      }
-      try {
-        await api.delete(`/tasks/${id}`);
-        setTasks((prev) => prev.filter((task) => task.id !== id));
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [tasks.rows.length, setTasks]
-  );
+  // const handleDeleteRow = useCallback(
+  //   async (id) => {
+  //     if (!tasks.rows.length) {
+  //       return;
+  //     }
+  //     try {
+  //       await api.delete(`/tasks/${id}`);
+  //       setTasks((prev) => prev.filter((task) => task.id !== id));
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   },
+  //   [tasks.rows.length, setTasks]
+  // );
 
   const handleSubmit = async () => {
     
@@ -64,7 +63,6 @@ export default function Board({ tasks, setTasks, status }) {
         <FaPlus />
         Add Task
       </Button>
-      <Table data={tasks} handleDeleteRow={handleDeleteRow} />
       <KanbanBoard data={tasks} />
       <Modal
         isOpen={isModalOpen}
