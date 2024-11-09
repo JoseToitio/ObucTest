@@ -1,0 +1,22 @@
+.container-board {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  gap: 5rem;
+}
+
+
+.title {
+  margin-bottom: 0;
+}
+
+.description {
+
+}
+
+.tasks {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}

@@ -11,9 +11,9 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [tasksTableData, setTasksTableData] = useState({
     headers: [
-      { label: "Responsible", column: "assignedTo" },
-      { label: "Description", column: "description" },
-      { label: "Status", column: "status" },
+      { label: "To do", column: "pending" },
+      { label: "In progress", column: "inProgress" },
+      { label: "Done", column: "done" },
     ],
     rows: [],
   });
@@ -33,9 +33,9 @@ export default function Home() {
   useEffect(() => {
     setTasksTableData({
       headers: [
-        { label: "Responsible", column: "assignedTo" },
-        { label: "Description", column: "description" },
-        { label: "Status", column: "status" },
+        { label: "To do", column: "pending" },
+        { label: "In progress", column: "inProgress" },
+        { label: "Done", column: "completed" },
       ],
       rows: tasks,
     });

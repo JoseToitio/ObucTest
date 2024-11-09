@@ -9,13 +9,14 @@ import Table from "../../../components/Table/Table";
 import PropTypes from "prop-types";
 import { api } from "../../../services/api";
 import { configToken } from "../../../services/utils";
+import KanbanBoard from "../../../components/KanbanBoard/KanbanBoard";
 
 export default function Board({ tasks, setTasks, status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const clearNewTask = {
     description: "",
     status: "",
-    assignedTo: "",
+    title: "",
   };
   const [newTask, setNewTask] = useState(clearNewTask);
 
@@ -46,7 +47,7 @@ export default function Board({ tasks, setTasks, status }) {
     
     try {
       await api.post("/tasks", {
-        assignedTo: newTask.assignedTo,
+        title: newTask.title,
         description: newTask.description,
         status: newTask.status,
       }, configToken());
@@ -64,6 +65,7 @@ export default function Board({ tasks, setTasks, status }) {
         Add Task
       </Button>
       <Table data={tasks} handleDeleteRow={handleDeleteRow} />
+      <KanbanBoard data={tasks} />
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -72,11 +74,11 @@ export default function Board({ tasks, setTasks, status }) {
         setNewTask={setNewTask}
       >
         <InputText
-          label="Responsible"
-          placeholder={"Insert task responsible"}
+          label="Title"
+          placeholder={"Insert task title"}
           required={true}
           onChange={(e) =>
-            setNewTask((prev) => ({ ...prev, assignedTo: e.target.value }))
+            setNewTask((prev) => ({ ...prev, title: e.target.value }))
           }
         />
         <InputText
