@@ -9,8 +9,8 @@ import PropTypes from "prop-types";
 export default function Tags({ tags, addTag, removeTag }) {
   const [newTag, setNewTag] = useState("");
 
-  const handleEdit = (id) => {
-    console.log("Editar tag com id:", id);
+  const handleEdit = () => {
+    return;
   };
 
   const handleChange = (event) => {
