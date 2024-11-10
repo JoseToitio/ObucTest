@@ -28,7 +28,10 @@ export default function Tags({ tags, addTag, removeTag }) {
             value={newTag}
             onChange={handleChange}
           />
-          <Button onClick={() => addTag(newTag)}>
+          <Button onClick={() => {
+            addTag(newTag);
+            setNewTag("");
+          }}>
             <FaPlus />
             Add Tag
           </Button>

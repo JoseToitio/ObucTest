@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { api } from '../services/api';
+import { api, updateTaskStatus } from '../services/api';
 import { configToken } from '../services/utils';
 
 export const TasksContext = createContext();
 
 export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [taskTimers, setTaskTimers] = useState({});
   const [tasksTableData, setTasksTableData] = useState({
     headers: [
       { label: "To do", column: "pending" },
@@ -30,6 +31,33 @@ export const TasksProvider = ({ children }) => {
     },
     [tasks.length, setTasks]
   );
+
+  const removeCompletedTaskAfterTimeout = (task) => {
+    if (task.status !== "completed") {
+      return;
+    }
+    const expirationTime = 60000;
+    const timer = setTimeout(() => {
+      handleDeleteRow(task.id);
+      setTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id)); 
+    }, expirationTime);
+
+    setTaskTimers((prevTimers) => ({
+      ...prevTimers,
+      [task.id]: timer,
+    }));
+  };
+
+  const cancelTaskTimeout = (taskId) => {
+    if (taskTimers[taskId]) {
+      clearTimeout(taskTimers[taskId]);
+      setTaskTimers((prevTimers) => {
+        const newTimers = { ...prevTimers };
+        delete newTimers[taskId];
+        return newTimers;
+      });
+    }
+  };
 
     useEffect(() => {
     setTasksTableData({
@@ -59,12 +87,21 @@ export const TasksProvider = ({ children }) => {
     setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskToRemove.id));
   };
 
-  const updateTask = (updatedTask) => {
+  const updateTask = (updatedTask, body) => {
+    if (updatedTask.status !== "completed") {
+      cancelTaskTimeout(updatedTask.id);
+    }
+
+    updateTaskStatus(updatedTask.id, body)
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === updatedTask.id ? updatedTask : task
       )
     );
+
+    if (updatedTask.status === "completed") {
+      removeCompletedTaskAfterTimeout(updatedTask);
+    }
   };
 
 

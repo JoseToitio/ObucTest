@@ -9,8 +9,7 @@
 .column {
   display: flex;
   list-style: none;
-  min-width: 362px;
-  width: 400px;
+  width: 100%;
   flex-direction: column;
   gap: 0.5rem;
   padding: 24px;

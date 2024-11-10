@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import "./KanbanBoard.css";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { useState, useEffect } from "react";
-import { updateTaskStatus } from "../../services/api";
+import { useState, useEffect, useContext } from "react";
 import Card from "../Card/Card";
+import { TasksContext } from "../../context/TasksContext";
 
 function borderColor(label) {
   switch (label) {
@@ -21,6 +21,7 @@ function borderColor(label) {
 
 export default function KanbanBoard({ data }) {
   const [columns, setColumns] = useState(data);
+  const { updateTask } = useContext(TasksContext);
   const onDragEnd = (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -32,7 +33,7 @@ export default function KanbanBoard({ data }) {
       const [removed] = sourceItems.splice(source.index, 1);
       removed.status = destination.droppableId;
       destItems.splice(destination.index, 0, removed);
-      updateTaskStatus(removed.id, {
+      updateTask(removed, {
         status: destination.droppableId,
       });
       setColumns({

@@ -5,16 +5,16 @@ export const TagsContext = createContext();
 
 export const TagsProvider = ({ children }) => {
   const [tags, setTags] = useState([
-    { id: 1, value: "frontend", label: "Frontend" },
-    { id: 2, value: "backend", label: "Backend" },
-    { id: 3, value: "design", label: "Design" },
+    { id: 1, value: "Frontend", label: "Frontend" },
+    { id: 2, value: "Backend", label: "Backend" },
+    { id: 3, value: "Design", label: "Design" },
   ]);
 
   const addTag = (newTag) => {
     const tagFormatted = {
       id: tags.length + 1,
-      value: newTag,
-      label: newTag,
+      value: newTag.charAt(0).toUpperCase() + newTag.slice(1),
+      label: newTag.charAt(0).toUpperCase() + newTag.slice(1),
     }
     setTags((prevTags) => [...prevTags, tagFormatted]);
   };
