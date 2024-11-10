@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import "./Card.css";
 import { Draggable } from "@hello-pangea/dnd";
+import { useContext } from "react";
+import { TasksContext } from "../../context/TasksContext";
 
 function getStyle(style, snapshot) {
   if (!snapshot.isDropAnimating) {
@@ -13,6 +15,7 @@ function getStyle(style, snapshot) {
 }
 
 export default function Card({ task, index }) {
+  const { removeTask } = useContext(TasksContext);
   return (
     <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
       {(provided, snapshot) => (
@@ -22,6 +25,7 @@ export default function Card({ task, index }) {
           {...provided.dragHandleProps}
           style={getStyle(provided.draggableProps.style, snapshot)}
           className="list-group"
+          onClick={() => removeTask(task.id)}
         >
           <div className="title-card">
             <p>{task.title}</p>
@@ -30,7 +34,7 @@ export default function Card({ task, index }) {
             <p>{task.description}</p>
           </div>
           <hr className="last-line"/>
-          <div className="tag-card">{task.status}</div>
+          <div className="tag-card">{task.categories}</div>
         </li>
       )}
     </Draggable>

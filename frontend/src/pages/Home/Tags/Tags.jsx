@@ -4,37 +4,13 @@ import { useState } from "react";
 import InputText from "../../../components/InputText/InputText";
 import Button from "../../../components/Button/Button";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import PropTypes from "prop-types";
 
-export default function Tags() {
+export default function Tags({ tags, addTag, removeTag }) {
   const [newTag, setNewTag] = useState("");
-  const [tags, setTags] = useState([
-    { id: 1, name: "Frontend" },
-    { id: 2, name: "Backend" },
-    { id: 3, name: "Design" },
-  ]);
-
-  const handleDelete = (id) => {
-    setTags(tags.filter((tag) => tag.id !== id));
-  };
 
   const handleEdit = (id) => {
     console.log("Editar tag com id:", id);
-  };
-  const handleTagSubmit = (event) => {
-    event.preventDefault();
-    if (!newTag) {
-      return;
-    }
-
-    setTags((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        name: newTag,
-      },
-    ]);
-
-    setNewTag("");
   };
 
   const handleChange = (event) => {
@@ -52,7 +28,7 @@ export default function Tags() {
             value={newTag}
             onChange={handleChange}
           />
-          <Button onClick={handleTagSubmit}>
+          <Button onClick={() => addTag(newTag)}>
             <FaPlus />
             Add Tag
           </Button>
@@ -65,11 +41,11 @@ export default function Tags() {
         <ul className="tag-items">
           {tags.map((tag, index) => (
             <li key={index} className="tag-item">
-              <span className="tag-name">{tag.name}</span>
+              <span className="tag-name">{tag.value}</span>
               <div className="tag-actions">
                 <button
                   className="action-button"
-                  onClick={() => handleDelete(tag.id)}
+                  onClick={() => removeTag(tag)}
                 >
                   <FiTrash2 />
                 </button>
@@ -87,3 +63,9 @@ export default function Tags() {
     </div>
   );
 }
+
+Tags.propTypes = {
+  tags: PropTypes.array.isRequired,
+  addTag: PropTypes.func,
+  removeTag: PropTypes.func,
+};

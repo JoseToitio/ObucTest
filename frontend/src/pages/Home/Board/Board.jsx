@@ -10,11 +10,11 @@ import { api } from "../../../services/api";
 import { configToken } from "../../../services/utils";
 import KanbanBoard from "../../../components/KanbanBoard/KanbanBoard";
 
-export default function Board({ tasks, setTasks, status }) {
+export default function Board({ tasks, tag,  onFilterTask, setTasks }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const clearNewTask = {
     description: "",
-    status: "",
+    categories: [],
     title: "",
   };
   const [newTask, setNewTask] = useState(clearNewTask);
@@ -27,29 +27,17 @@ export default function Board({ tasks, setTasks, status }) {
     setIsModalOpen((prev) => !prev);
   };
 
-  // const handleDeleteRow = useCallback(
-  //   async (id) => {
-  //     if (!tasks.rows.length) {
-  //       return;
-  //     }
-  //     try {
-  //       await api.delete(`/tasks/${id}`);
-  //       setTasks((prev) => prev.filter((task) => task.id !== id));
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   },
-  //   [tasks.rows.length, setTasks]
-  // );
-
   const handleSubmit = async () => {
-    
     try {
-      await api.post("/tasks", {
-        title: newTask.title,
-        description: newTask.description,
-        status: newTask.status,
-      }, configToken());
+      await api.post(
+        "/tasks",
+        {
+          title: newTask.title,
+          description: newTask.description,
+          categories: [newTask.categories],
+        },
+        configToken()
+      );
       const response = await api.get("/tasks", configToken());
       setTasks(response.data);
     } catch (error) {
@@ -57,12 +45,14 @@ export default function Board({ tasks, setTasks, status }) {
     }
   };
 
+
   return (
     <div id="board-wrapper">
       <Button onClick={handleOpenModal}>
         <FaPlus />
         Add Task
       </Button>
+      <InputText placeholder="Digite a categoria desejada" onChange={onFilterTask} />
       <KanbanBoard data={tasks} />
       <Modal
         isOpen={isModalOpen}
@@ -89,12 +79,12 @@ export default function Board({ tasks, setTasks, status }) {
           }
         />
         <OptionSelect
-          label="Status"
+          label="Tags"
           required={true}
-          placeholder={"Select status"}
-          options={status}
+          placeholder={"Select tag"}
+          options={tag}
           onChange={(e) =>
-            setNewTask((prev) => ({ ...prev, status: e.target.value }))
+            setNewTask((prev) => ({ ...prev, categories: e.target.value }))
           }
         />
       </Modal>
@@ -103,7 +93,8 @@ export default function Board({ tasks, setTasks, status }) {
 }
 
 Board.propTypes = {
-  status: PropTypes.array.isRequired,
   tasks: PropTypes.object.isRequired,
   setTasks: PropTypes.func.isRequired,
+  tag: PropTypes.array.isRequired,
+  onFilterTask: PropTypes.func.isRequired,
 };

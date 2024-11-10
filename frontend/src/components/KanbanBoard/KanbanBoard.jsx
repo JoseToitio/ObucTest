@@ -51,7 +51,6 @@ export default function KanbanBoard({ data }) {
       });
     }
   };
-  console.log(columns);
   useEffect(() => {
     const groupedTasks = data.headers.reduce((acc, { column }) => {
       acc[column] = data.rows.filter((task) => task.status === column);

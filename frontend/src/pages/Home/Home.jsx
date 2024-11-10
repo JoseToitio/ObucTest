@@ -2,56 +2,25 @@ import Navbar from "../../components/Navbar/Navbar";
 import "./Home.css";
 import Board from "./Board/Board";
 import Tags from "./Tags/Tags";
-import { useEffect, useState } from "react";
-import { api } from "../../services/api";
-import { configToken } from "../../services/utils";
+import { useContext, useState } from "react";
+import { TasksContext } from "../../context/TasksContext";
+import { TagsContext } from "../../context/TagsContext";
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState("board");
-  const [tasks, setTasks] = useState([]);
-  const [tasksTableData, setTasksTableData] = useState({
-    headers: [
-      { label: "To do", column: "pending" },
-      { label: "In progress", column: "inProgress" },
-      { label: "Done", column: "done" },
-    ],
-    rows: [],
-  });
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await api.get("/tasks", configToken());
-        setTasks(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchTasks();
-  }, []);
-
-  useEffect(() => {
-    setTasksTableData({
-      headers: [
-        { label: "To do", column: "pending" },
-        { label: "In progress", column: "inProgress" },
-        { label: "Done", column: "completed" },
-      ],
-      rows: tasks,
-    });
-  }, [tasks, setTasks]);
-
-  const statusOptions = [{ id: 1, value: "pending", label: "Pending" }, { id: 2, value: "inProgress", label: "In Progress" }, { id: 3, value: "completed", label: "Done" }];
+  const { tasksTableData, filterTask, setTasks } = useContext(TasksContext);
+  const { tags, addTag, removeTag } =  useContext(TagsContext);
 
   const tabs = {
     board: (
       <Board
-        status={statusOptions}
+        tag={tags}
         tasks={tasksTableData}
+        onFilterTask={filterTask}
         setTasks={setTasks}
       />
     ),
-    tags: <Tags  />,
+    tags: <Tags addTag={addTag} removeTag={removeTag} tags={tags}  />,
   };
   
   return (
