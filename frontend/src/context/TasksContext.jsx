@@ -1,13 +1,10 @@
-// src/contexts/TasksContext.js
 import PropTypes from 'prop-types';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { configToken } from '../services/utils';
 
-// Criação do contexto
 export const TasksContext = createContext();
 
-// Criação do provider
 export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [tasksTableData, setTasksTableData] = useState({
@@ -70,20 +67,10 @@ export const TasksProvider = ({ children }) => {
     );
   };
 
-  const filterTask = (event) => {
-    const { value } = event.target;
-    const lowerCaseValue = value.toLowerCase();
 
-    const filtered = tasks.filter(task =>
-      task.categories.some(category =>
-        category.toLowerCase().includes(lowerCaseValue)
-      )
-    );
-    console.log(filtered);
-  };
 
   return (
-    <TasksContext.Provider value={{ tasks, removeTask, updateTask, setTasks, tasksTableData, filterTask }}>
+    <TasksContext.Provider value={{ tasks, removeTask, updateTask, setTasks, tasksTableData }}>
       {children}
     </TasksContext.Provider>
   );

@@ -1,8 +1,6 @@
-// src/contexts/TagsContext.js
 import PropTypes from "prop-types";
 import { createContext, useState } from "react";
 
-// Criação do contexto
 export const TagsContext = createContext();
 
 export const TagsProvider = ({ children }) => {

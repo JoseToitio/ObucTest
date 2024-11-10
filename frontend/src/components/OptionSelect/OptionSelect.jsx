@@ -6,6 +6,7 @@ export default function OptionSelect({
   options,
   required,
   onChange,
+  multiple = false,
 }) {
   return (
     <div className="select-wrapper">
@@ -13,6 +14,7 @@ export default function OptionSelect({
       <select
         id="option-select"
         name="option-select"
+        multiple={multiple}
         defaultValue={""}
         required={required}
         onChange={onChange}
@@ -37,4 +39,5 @@ OptionSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object),
   required: PropTypes.bool,
   onChange: PropTypes.func,
+  multiple: PropTypes.bool,
 };

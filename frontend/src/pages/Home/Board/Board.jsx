@@ -9,9 +9,11 @@ import PropTypes from "prop-types";
 import { api } from "../../../services/api";
 import { configToken } from "../../../services/utils";
 import KanbanBoard from "../../../components/KanbanBoard/KanbanBoard";
+import { IoCloseOutline } from "react-icons/io5";
 
-export default function Board({ tasks, tag,  onFilterTask, setTasks }) {
+export default function Board({ tasks, tag, setTasks }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterTasks, setFilterTasks] = useState([]);
   const clearNewTask = {
     description: "",
     categories: [],
@@ -21,6 +23,7 @@ export default function Board({ tasks, tag,  onFilterTask, setTasks }) {
 
   const handleCloseModal = () => {
     setIsModalOpen((prev) => !prev);
+    setNewTask(clearNewTask);
   };
 
   const handleOpenModal = () => {
@@ -45,15 +48,65 @@ export default function Board({ tasks, tag,  onFilterTask, setTasks }) {
     }
   };
 
+  const handleTagChange = (e) => {
+    const selectedOption = e.target.value;
+    if (selectedOption && !newTask.categories.includes(selectedOption)) {
+      setNewTask((prev) => ({
+        ...prev,
+        categories: [...prev.categories, selectedOption],
+      }));
+    }
+  };
 
+  const removeTag = (tagToRemove) => {
+    setNewTask((prev) => ({
+      ...prev,
+      categories: prev.categories.filter((tag) => tag !== tagToRemove),
+    }));
+  };
+
+  const filterTask = (event) => {
+    const { value } = event.target;
+    const lowerCaseValue = value.toLowerCase();
+
+    if (value === "") {
+      setFilterTasks([]);
+      return;
+    }
+
+    const filtered = tasks.rows.filter((task) =>
+      task.categories.some((categoryArray) =>
+        Array.isArray(categoryArray)
+          ? categoryArray.some((category) =>
+              category.toLowerCase().includes(lowerCaseValue)
+            )
+          : categoryArray.toLowerCase().includes(lowerCaseValue)
+      )
+    );
+
+    setFilterTasks(filtered);
+  };
+
+  const filteredTasks = filterTasks.length > 0 ? filterTasks : tasks.rows;
+  console.log(tasks);
   return (
     <div id="board-wrapper">
-      <Button onClick={handleOpenModal}>
-        <FaPlus />
-        Add Task
-      </Button>
-      <InputText placeholder="Digite a categoria desejada" onChange={onFilterTask} />
-      <KanbanBoard data={tasks} />
+      <div className="button-input">
+        <Button onClick={handleOpenModal}>
+          <FaPlus />
+          Add Task
+        </Button>
+        <InputText
+          placeholder="Digite a categoria desejada"
+          onChange={filterTask}
+        />
+      </div>
+      <KanbanBoard
+        data={{
+          headers: tasks.headers,
+          rows: filteredTasks,
+        }}
+      />
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -83,10 +136,16 @@ export default function Board({ tasks, tag,  onFilterTask, setTasks }) {
           required={true}
           placeholder={"Select tag"}
           options={tag}
-          onChange={(e) =>
-            setNewTask((prev) => ({ ...prev, categories: e.target.value }))
-          }
+          onChange={handleTagChange}
         />
+        <div className="tag-modal">
+          {newTask.categories.map((tag, index) => (
+            <div key={index} className="tag-card div-tag-modal">
+              <span>{tag}</span>
+              <IoCloseOutline onClick={() => removeTag(tag)} size={16} />
+            </div>
+          ))}
+        </div>
       </Modal>
     </div>
   );
@@ -96,5 +155,4 @@ Board.propTypes = {
   tasks: PropTypes.object.isRequired,
   setTasks: PropTypes.func.isRequired,
   tag: PropTypes.array.isRequired,
-  onFilterTask: PropTypes.func.isRequired,
 };

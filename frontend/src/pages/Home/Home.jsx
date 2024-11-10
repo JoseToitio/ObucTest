@@ -8,7 +8,7 @@ import { TagsContext } from "../../context/TagsContext";
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState("board");
-  const { tasksTableData, filterTask, setTasks } = useContext(TasksContext);
+  const { tasksTableData, setTasks } = useContext(TasksContext);
   const { tags, addTag, removeTag } =  useContext(TagsContext);
 
   const tabs = {
@@ -16,7 +16,6 @@ export default function Home() {
       <Board
         tag={tags}
         tasks={tasksTableData}
-        onFilterTask={filterTask}
         setTasks={setTasks}
       />
     ),
