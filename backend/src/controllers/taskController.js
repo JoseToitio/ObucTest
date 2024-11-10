@@ -2,14 +2,14 @@ const { Task } = require("../models");
 
 const createTask = async (req, res) => {
   try {
-    const { description, status, assignedTo, categories } = req.body;
-    const userId = req.user ? req.user.id : null;
+    const { title, description, status, categories } = req.body;
+    const userName = req.user ? req.user.userName : null;
     const task = await Task.create({
+      title,
       description,
-      assignedTo,
+      assignedTo: userName,
       status,
       categories,
-      userId,
     });
 
     return res.status(201).json(task);
@@ -22,9 +22,9 @@ const getAllTasks = async (req, res) => {
   try {
     let tasks;
     if (req.user) {
-      tasks = await Task.findAll({ where: { userId: req.user.id } });
+      tasks = await Task.findAll({ where: { assignedTo: req.user.userName } });
     } else {
-      tasks = await Task.findAll({ where: { userId: null } });
+      tasks = await Task.findAll({ where: { assignedTo: null } });
     }
 
     return res.status(200).json(tasks);
@@ -35,8 +35,8 @@ const getAllTasks = async (req, res) => {
 
 const getUserTasks = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const tasks = await Task.findAll({ where: { userId } });
+    const userName = req.user.userName;
+    const tasks = await Task.findAll({ where: { assignedTo: userName } });
     return res.status(200).json(tasks);
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -59,12 +59,12 @@ const getTaskById = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const { description, status, assignedTo } = req.body;
+    const { title, description, status, assignedTo } = req.body;
 
     const task = await Task.findByPk(req.params.id);
 
     if (task) {
-      await task.update({ description, status, assignedTo });
+      await task.update({ title, description, status, assignedTo });
 
       await task.reload();
 

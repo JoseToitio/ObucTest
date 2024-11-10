@@ -11,6 +11,6 @@ router.route('/tasks')
 router.route('/tasks/:id')
     .get(taskController.getTaskById)
     .patch(taskController.updateTask)
-    .delete(taskController.deleteTask)
+    .delete(authenticate, taskController.deleteTask)
 
 module.exports = router;

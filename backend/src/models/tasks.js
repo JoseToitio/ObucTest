@@ -4,14 +4,18 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Task extends Model {
     static associate(models) {
-      Task.belongsTo(models.User, { foreignKey: "userId" });
     }
   }
 
   Task.init(
     {
-      description: {
+      title: {
         type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      description: {
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       status: {
@@ -22,16 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       assignedTo: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
       },
       categories: {
         type: DataTypes.ARRAY(DataTypes.STRING),

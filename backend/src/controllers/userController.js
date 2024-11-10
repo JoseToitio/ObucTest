@@ -41,7 +41,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
     const token = jwt.sign({ id: user.id }, 'secret', { });
-    return res.status(200).json({ message: 'Login successfully', token });
+    return res.status(200).json({ token, user: userName });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -51,7 +51,6 @@ const registerUser = async (req, res) => {
   const { userName, password } = req.body;
   try {
     const existingUser = await User.findOne({ where: { userName } });
-    console.log(existingUser);
     if (existingUser) {
       return res.status(409).json({ error: "userName already in use" });
     }

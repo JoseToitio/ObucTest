@@ -9,8 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      description: {
+      title: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      description: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       status: {
@@ -21,16 +26,6 @@ module.exports = {
       assignedTo: {
         type: Sequelize.STRING,
         allowNull: true,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
       },
       categories: {
         type: Sequelize.ARRAY(Sequelize.STRING),
