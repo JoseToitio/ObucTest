@@ -33,8 +33,14 @@ export default function Card({ task, index }) {
           <div className="description">
             <p>{task.description}</p>
           </div>
-          <hr className="last-line"/>
-          <div className="tag-card">{task.categories}</div>
+          <hr className="last-line" />
+          <div className="container-tag-card">
+          {task.categories.map((category, index) => (
+            <div className="tag-card" key={index}>
+              <span>{category}</span>
+            </div>
+          ))}
+          </div>
         </li>
       )}
     </Draggable>

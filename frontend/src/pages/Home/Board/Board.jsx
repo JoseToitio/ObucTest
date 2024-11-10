@@ -37,7 +37,7 @@ export default function Board({ tasks, tag, setTasks }) {
         {
           title: newTask.title,
           description: newTask.description,
-          categories: [newTask.categories],
+          categories: newTask.categories,
         },
         configToken()
       );
@@ -88,7 +88,7 @@ export default function Board({ tasks, tag, setTasks }) {
   };
 
   const filteredTasks = filterTasks.length > 0 ? filterTasks : tasks.rows;
-  console.log(tasks);
+
   return (
     <div id="board-wrapper">
       <div className="button-input">

@@ -34,3 +34,10 @@
   font-size: 12px;
   font-weight: 700;
 }
+
+.container-tag-card {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
