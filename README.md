@@ -11,6 +11,7 @@ Este projeto é um sistema de Gerenciamento de Tarefas que permite aos usuários
  - Filtro por Categoria: Filtre tarefas por diferentes categorias para uma visão mais organizada.
  - Atribuição de Responsáveis: As tarefas são separadas por usuários, garantindo que cada usuário visualize apenas as tarefas que lhe pertencem.
  - Controle de Status: Atualize o status das tarefas de forma intuitiva, arrastando e soltando-as entre as colunas (To Do, In Progress, Done).
+ - Ocultar Tarefas Concluídas Antigas: Para uma melhor visualização, tarefas concluídas há muito tempo são ocultadas por padrão (60 segundos).
 
 # Instalação
 
