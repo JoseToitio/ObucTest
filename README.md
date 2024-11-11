@@ -16,7 +16,7 @@ Este projeto é um sistema de Gerenciamento de Tarefas que permite aos usuários
 # Instalação
 
 ### Inicialização com Docker
-  Para executar a aplicação utilizando Docker, navegue até a raiz do projeto onde o arquivo docker-compose.yml está localizado e execute o seguinte comando:
+  Para executar a aplicação utilizando Docker, navegue até a raiz do projeto onde o arquivo docker-compose.yml está localizado e execute o seguinte comando (esse comando vai fazer o build das Images do frontend e backend):
 ```bash
   docker-compose up -d --build 
 ```
